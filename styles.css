@@ -1,0 +1,23 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+#cpm_live_value .currency-convertor {
+  background: #c3c8ed;
+  border: 2px solid blue;
+}
+.input_design {
+  font-weight: 700;
+  font-size: 20px;
+  border: 1px solid black;
+  padding: 5px;
+  color: #4e4e19;
+  text-align: center;
+  
+}
+input[type="number"] {padding: 5px;text-align: center;}
+.amount{
+    font-size: 14px;
+    font-weight: 600;
+}
