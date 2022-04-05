@@ -1,7 +1,6 @@
 //Construction
 const { useState, useEffect } = React;
 
-
 const LiveValue = () => {
   const [exchangeAmount, setExchangeAmount] = useState("CPM");
   const [convertor, setConvertor] = useState("BTC");
@@ -14,7 +13,10 @@ const LiveValue = () => {
     cpmBlance: 1000,
     usdBlance: 100,
   });
-  console.log("coni", coinName);
+
+  const [exchangeData,setExchangeData]=useState([])
+  
+
   const handleForm = (e) => {
     setExchangeAmount(e.target.value.split("-")[0]);
     setConvertor(e.target.value.split("-")[1]);
@@ -24,67 +26,96 @@ const LiveValue = () => {
     console.log(e.target.value);
   };
 
-  const url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-  fetch(url, {
-    method: "GET",
-    headers: {
-      // "X-Auth-Token": "ef72570ff371408f9668e414353b7b2e"
-      "X-CMC_PRO_API_KEY": "f836f93b-6ac2-4e0d-8010-ee59b9033da9",
-      "Content-Type": "application/json"
+  console.log('exchangeData',exchangeData);
 
-    }
+  // FIlter
+  let filteredPeople = exchangeData.filter((data)=>{
+
+        if(data.id==1 || data.id==1027 || data.id ==1839 || data.id == 3408){
+          return data
+        }
+
   })
-  .then((res)=>res.json())
-  .then((data)=>console.log(data))
-  
+    
+
+  let name;
+  if (filteredPeople[2] != null) {
+    name = filteredPeople[2].name;
+  }
+  console.log('filter',name);
+
+useEffect(() => {
+
+  axios({
+    method: "get",
+    url: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
+    headers: {
+      "X-CMC_PRO_API_KEY": "f836f93b-6ac2-4e0d-8010-ee59b9033da9",
+    },
+  }).then(function (res) {
+    setExchangeData(res.data.data);
+ 
+  });
+}, [])
+
+
 
   const data = [
     {
       id: 1,
-      exchangeSymbol: "CPM-BTC",
+      exchangeSymbol: "CPM-ETH",
       coinName: "CPM Coin",
-      convertCoinName: "Bitcoin",
+      convertCoinName: "Ethereum",
       currencyValue: 1.43587,
+     
     },
     {
       id: 2,
-      exchangeSymbol: "ETH-CPM",
-      coinName: "Ethereum",
+      exchangeSymbol: "CPM-USD",
+      coinName: "CPM Coin",
       convertCoinName: "American Dollar",
       currencyValue: 50000,
     },
     {
       id: 3,
-      exchangeSymbol: "BTC-USD",
-      coinName: "Bitcoin",
-      convertCoinName: "American Dollar",
+      exchangeSymbol: "CPM-BNB",
+      coinName: "CPM Coin",
+      convertCoinName: "Binance",
       currencyValue: 47226.4725,
     },
     {
       id: 4,
-      exchangeSymbol: "BTC-CPM",
-      coinName: "Bitcoin",
-      convertCoinName: "CPM Coin",
+      exchangeSymbol: "CPM-BTC",
+      coinName: "CPM Coin",
+      convertCoinName: "Bitcoin ",
       currencyValue: 696439.6094,
     },
     {
       id: 5,
-      exchangeSymbol: "BNB-USD",
-      coinName: "Binance",
+      exchangeSymbol: "ETH-USD",
+      coinName: "Ethereum",
       convertCoinName: "American Dollar",
       currencyValue: 430.6023,
     },
     {
       id: 6,
-      exchangeSymbol: "BNB-CPM",
-      coinName: "Binance",
+      exchangeSymbol: "ETH-CPM",
+      coinName: "Ethereum",
       convertCoinName: "CPM Coin",
       currencyValue: 6350.008412,
     },
     {
       id: 7,
-      exchangeSymbol: "USD-CPM",
-      coinName: "American Dollar",
+      exchangeSymbol: "BTC-USD",
+      coinName: "Bitcoin",
+      convertCoinName: "American Dollar",
+      currencyValue: 14.74680561,
+    },
+    {
+      id: 7,
+      exchangeSymbol: "BTC-CPM",
+      // coinName: "Bitcoin",
+      coinName: filteredPeople[3],
       convertCoinName: "CPM Coin",
       currencyValue: 14.74680561,
     },
@@ -131,6 +162,9 @@ const LiveValue = () => {
                       )
                     )}
                   </select>
+            
+                 
+               
                   <div className="row cpm-description ">
                     <div className="col-md-6">
                       <h5>I have:</h5>
@@ -170,6 +204,9 @@ const LiveValue = () => {
           </div>
         </div>
       </div>
+      {
+        filteredPeople.map((d)=><h4>{d.name} = {d.symbol}</h4>)
+      }
 
       <div id="cpm_evolution" className="mb-5 mx-2">
         <div className="container">
@@ -274,4 +311,3 @@ const App = () => (
 );
 
 ReactDOM.render(<App />, document.querySelector("#root"));
-
